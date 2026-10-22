@@ -1,0 +1,328 @@
+:root {
+  font-family:
+    Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
+  color: #172033;
+  background: #eef2f6;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid #2563eb;
+  outline-offset: 3px;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  grid-template-rows: auto 1fr;
+}
+
+.app-header {
+  min-height: 76px;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  background: #ffffff;
+  border-bottom: 1px solid #d8e0e8;
+}
+
+.brand-lockup {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.brand-mark {
+  width: 42px;
+  height: 42px;
+  display: grid;
+  place-items: center;
+  border-radius: 12px;
+  color: #ffffff;
+  background: #1e3a5f;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  box-shadow: 0 6px 16px rgba(30, 58, 95, 0.2);
+}
+
+.brand-kicker,
+.section-kicker {
+  margin: 0 0 3px;
+  color: #64748b;
+  font-size: 0.7rem;
+  font-weight: 800;
+  letter-spacing: 0.11em;
+  text-transform: uppercase;
+}
+
+.app-header h1,
+.canvas-toolbar h2,
+.details-panel h2,
+.details-panel h3 {
+  margin: 0;
+}
+
+.app-header h1 {
+  font-size: 1.32rem;
+  letter-spacing: -0.03em;
+}
+
+.stage-badge {
+  padding: 7px 11px;
+  border: 1px solid #cbd5e1;
+  border-radius: 999px;
+  color: #475569;
+  background: #f8fafc;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.workspace {
+  min-height: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 320px;
+}
+
+.canvas-region {
+  min-width: 0;
+  min-height: 0;
+  padding: 20px;
+  display: grid;
+  grid-template-rows: auto minmax(460px, 1fr);
+  gap: 14px;
+}
+
+.canvas-toolbar {
+  display: flex;
+  align-items: end;
+  justify-content: space-between;
+  gap: 24px;
+}
+
+.canvas-toolbar h2 {
+  font-size: 1.12rem;
+  letter-spacing: -0.015em;
+}
+
+.interaction-hint {
+  max-width: 440px;
+  margin: 0;
+  color: #526174;
+  font-size: 0.84rem;
+  line-height: 1.45;
+  text-align: right;
+}
+
+.canvas-frame {
+  min-height: 0;
+  overflow: hidden;
+  border: 1px solid #cad4df;
+  border-radius: 16px;
+  background: #fbfdff;
+  box-shadow: 0 14px 36px rgba(30, 41, 59, 0.08);
+}
+
+.details-panel {
+  min-width: 0;
+  padding: 28px 24px;
+  background: #ffffff;
+  border-left: 1px solid #d8e0e8;
+}
+
+.details-panel h2 {
+  margin-top: 5px;
+  font-size: 1.45rem;
+  line-height: 1.18;
+  letter-spacing: -0.035em;
+}
+
+.details-panel h3 {
+  margin-bottom: 8px;
+  font-size: 0.78rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.details-panel p {
+  color: #526174;
+  line-height: 1.6;
+}
+
+.details-block {
+  margin-top: 26px;
+  padding-top: 22px;
+  border-top: 1px solid #e2e8f0;
+}
+
+.details-block p {
+  margin: 0;
+}
+
+.details-empty {
+  margin-top: 18vh;
+}
+
+.details-empty__icon {
+  width: 46px;
+  height: 46px;
+  margin-bottom: 18px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  color: #31506f;
+  background: #e6edf4;
+  font-size: 1.25rem;
+}
+
+.color-chip {
+  margin-top: 15px;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  color: #475569;
+  font-size: 0.78rem;
+  font-weight: 700;
+}
+
+.color-chip::before {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--chip-color);
+  content: '';
+}
+
+.relationship-summary {
+  margin: 28px 0 0;
+}
+
+.relationship-summary div {
+  padding: 13px 0;
+  border-top: 1px solid #e2e8f0;
+}
+
+.relationship-summary dt {
+  color: #64748b;
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.relationship-summary dd {
+  margin: 4px 0 0;
+  color: #1e293b;
+  font-weight: 700;
+}
+
+.concept-node {
+  min-width: 168px;
+  max-width: 220px;
+  padding: 13px 16px 14px;
+  border: 2px solid var(--node-border);
+  border-radius: 12px;
+  color: var(--node-ink);
+  background: var(--node-surface);
+  box-shadow: 0 7px 18px rgba(15, 23, 42, 0.12);
+  transition:
+    box-shadow 120ms ease,
+    transform 120ms ease;
+}
+
+.concept-node--selected {
+  box-shadow:
+    0 0 0 4px #ffffff,
+    0 0 0 7px #1e3a5f,
+    0 10px 24px rgba(15, 23, 42, 0.18);
+  transform: translateY(-1px);
+}
+
+.concept-node__eyebrow {
+  margin-bottom: 4px;
+  display: block;
+  font-size: 0.62rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  opacity: 0.66;
+  text-transform: uppercase;
+}
+
+.concept-node strong {
+  display: block;
+  font-size: 0.94rem;
+  line-height: 1.25;
+}
+
+.concept-node .concept-node__handle {
+  width: 9px;
+  height: 9px;
+  border: 2px solid #ffffff;
+  background: var(--node-border);
+}
+
+.react-flow__edge.selected .react-flow__edge-path {
+  filter: drop-shadow(0 0 3px rgba(15, 23, 42, 0.65));
+  stroke-width: 4;
+}
+
+.react-flow__edge:focus-visible .react-flow__edge-path {
+  stroke-width: 4;
+}
+
+.react-flow__controls,
+.react-flow__minimap {
+  overflow: hidden;
+  border: 1px solid #cbd5e1;
+  border-radius: 10px;
+  box-shadow: 0 5px 16px rgba(15, 23, 42, 0.12);
+}
+
+.react-flow__attribution {
+  color: #64748b;
+  background: rgba(255, 255, 255, 0.88);
+}
+
+@media (max-width: 860px) {
+  .workspace {
+    grid-template-columns: minmax(0, 1fr) 270px;
+  }
+
+  .canvas-region {
+    padding: 14px;
+  }
+
+  .canvas-toolbar {
+    align-items: start;
+    flex-direction: column;
+    gap: 7px;
+  }
+
+  .interaction-hint {
+    text-align: left;
+  }
+}
