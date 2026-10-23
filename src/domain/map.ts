@@ -49,9 +49,16 @@ export interface CanvasPosition {
 export interface ConceptNode {
   id: string
   title: string
+  description: string
   notes: string
   position: CanvasPosition
   color: PaletteColor
+  categoryId: string
+}
+
+export interface ConceptCategory {
+  id: string
+  name: string
 }
 
 export interface ConceptConnection {
@@ -59,6 +66,8 @@ export interface ConceptConnection {
   sourceNodeId: string
   targetNodeId: string
   label: string
+  description: string
+  notes: string
   color: PaletteColor
   directed: boolean
 }
@@ -71,6 +80,7 @@ export interface MapViewport {
 
 export interface ConceptMap {
   version: typeof MAP_FORMAT_VERSION
+  categories: ConceptCategory[]
   nodes: ConceptNode[]
   connections: ConceptConnection[]
   viewport?: MapViewport

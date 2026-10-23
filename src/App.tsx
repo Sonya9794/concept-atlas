@@ -1,12 +1,59 @@
 import { useMemo, useState } from 'react'
 import { ConceptMapCanvas } from './components/ConceptMapCanvas'
 import { sampleMap } from './data/sampleMap'
-import { palette } from './domain/map'
+import { palette, type ConceptConnection } from './domain/map'
 
 type Selection =
   | { kind: 'node'; id: string }
   | { kind: 'connection'; id: string }
   | null
+
+interface ConnectionSummary {
+  connection: ConceptConnection
+  otherNodeTitle: string
+  direction: 'outgoing' | 'incoming' | 'related'
+}
+
+interface ConnectionListProps {
+  heading: string
+  items: ConnectionSummary[]
+  onSelect: (connectionId: string) => void
+}
+
+function ConnectionList({ heading, items, onSelect }: ConnectionListProps) {
+  if (items.length === 0) return null
+
+  return (
+    <div className="connection-group">
+      <h4>{heading}</h4>
+      <ul>
+        {items.map(({ connection, otherNodeTitle, direction }) => (
+          <li key={connection.id}>
+            <button
+              className="connection-link"
+              type="button"
+              onClick={() => onSelect(connection.id)}
+            >
+              <span className="connection-link__route">
+                {direction === 'outgoing'
+                  ? `→ ${otherNodeTitle}`
+                  : direction === 'incoming'
+                    ? `← ${otherNodeTitle}`
+                    : `↔ ${otherNodeTitle}`}
+              </span>
+              <span className="connection-link__label">
+                {connection.label || 'Unlabelled relationship'}
+              </span>
+              <span className="connection-link__description">
+                {connection.description}
+              </span>
+            </button>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )
+}
 
 function App() {
   const [selection, setSelection] = useState<Selection>(null)
@@ -27,6 +74,39 @@ function App() {
           )
         : undefined,
     [selection],
+  )
+
+  const selectedNodeConnections = useMemo<ConnectionSummary[]>(() => {
+    if (!selectedNode) return []
+
+    return sampleMap.connections
+      .filter(
+        (connection) =>
+          connection.sourceNodeId === selectedNode.id ||
+          connection.targetNodeId === selectedNode.id,
+      )
+      .map((connection) => {
+        const isSource = connection.sourceNodeId === selectedNode.id
+        const otherNodeId = isSource
+          ? connection.targetNodeId
+          : connection.sourceNodeId
+
+        return {
+          connection,
+          otherNodeTitle:
+            sampleMap.nodes.find((node) => node.id === otherNodeId)?.title ??
+            'Unknown concept',
+          direction: connection.directed
+            ? isSource
+              ? 'outgoing'
+              : 'incoming'
+            : 'related',
+        }
+      })
+  }, [selectedNode])
+
+  const selectedCategory = sampleMap.categories.find(
+    (category) => category.id === selectedNode?.categoryId,
   )
 
   const sourceTitle = sampleMap.nodes.find(
@@ -90,9 +170,43 @@ function App() {
               >
                 {palette[selectedNode.color].name}
               </span>
+              <dl className="node-summary">
+                <div>
+                  <dt>Category</dt>
+                  <dd>{selectedCategory?.name ?? 'Uncategorized'}</dd>
+                </div>
+                <div>
+                  <dt>Description</dt>
+                  <dd>{selectedNode.description}</dd>
+                </div>
+              </dl>
               <div className="details-block">
                 <h3>Notes</h3>
                 <p>{selectedNode.notes}</p>
+              </div>
+              <div className="details-block connections-block">
+                <h3>Connections</h3>
+                <ConnectionList
+                  heading="Outgoing"
+                  items={selectedNodeConnections.filter(
+                    (item) => item.direction === 'outgoing',
+                  )}
+                  onSelect={(id) => setSelection({ kind: 'connection', id })}
+                />
+                <ConnectionList
+                  heading="Incoming"
+                  items={selectedNodeConnections.filter(
+                    (item) => item.direction === 'incoming',
+                  )}
+                  onSelect={(id) => setSelection({ kind: 'connection', id })}
+                />
+                <ConnectionList
+                  heading="Related"
+                  items={selectedNodeConnections.filter(
+                    (item) => item.direction === 'related',
+                  )}
+                  onSelect={(id) => setSelection({ kind: 'connection', id })}
+                />
               </div>
             </>
           ) : selectedConnection ? (
@@ -110,17 +224,51 @@ function App() {
               <dl className="relationship-summary">
                 <div>
                   <dt>From</dt>
-                  <dd>{sourceTitle}</dd>
+                  <dd>
+                    <button
+                      className="relationship-node-link"
+                      type="button"
+                      onClick={() =>
+                        setSelection({
+                          kind: 'node',
+                          id: selectedConnection.sourceNodeId,
+                        })
+                      }
+                    >
+                      {sourceTitle}
+                    </button>
+                  </dd>
                 </div>
                 <div>
                   <dt>To</dt>
-                  <dd>{targetTitle}</dd>
+                  <dd>
+                    <button
+                      className="relationship-node-link"
+                      type="button"
+                      onClick={() =>
+                        setSelection({
+                          kind: 'node',
+                          id: selectedConnection.targetNodeId,
+                        })
+                      }
+                    >
+                      {targetTitle}
+                    </button>
+                  </dd>
                 </div>
                 <div>
                   <dt>Direction</dt>
                   <dd>{selectedConnection.directed ? 'Directed' : 'Undirected'}</dd>
                 </div>
+                <div>
+                  <dt>Description</dt>
+                  <dd>{selectedConnection.description}</dd>
+                </div>
               </dl>
+              <div className="details-block">
+                <h3>Notes</h3>
+                <p>{selectedConnection.notes}</p>
+              </div>
             </>
           ) : (
             <div className="details-empty">
